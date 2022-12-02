@@ -24,34 +24,34 @@ inline int sgn(fp_t x)
 }
 
 /*
-    Имплементация метода решения кубического уравнения — Cubic_Formula-Wolfram
-    Информация о методе — https://mathworld.wolfram.com/CubicFormula.html
-    Работу выполнил — Погосов Даниэль (https://github.com/DarklleS)
+    РРјРїР»РµРјРµРЅС‚Р°С†РёСЏ РјРµС‚РѕРґР° СЂРµС€РµРЅРёСЏ РєСѓР±РёС‡РµСЃРєРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ вЂ” Cubic_Formula-Wolfram
+    РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РјРµС‚РѕРґРµ вЂ” https://mathworld.wolfram.com/CubicFormula.html
+    Р Р°Р±РѕС‚Сѓ РІС‹РїРѕР»РЅРёР» вЂ” РџРѕРіРѕСЃРѕРІ Р”Р°РЅРёСЌР»СЊ (https://github.com/DarklleS)
 */
 template<typename fp_t>
 unsigned int solveCubic(fp_t n, fp_t a, fp_t b, fp_t c, vector<fp_t>& roots)
 {
-    // Нормировка исходных коэффициентов, где n - старший коэффициент уравнения
+    // РќРѕСЂРјРёСЂРѕРІРєР° РёСЃС…РѕРґРЅС‹С… РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ, РіРґРµ n - СЃС‚Р°СЂС€РёР№ РєРѕСЌС„С„РёС†РёРµРЅС‚ СѓСЂР°РІРЅРµРЅРёСЏ
     a /= n;
     b /= n;
     c /= n;
 
-    // Объявление констант
+    // РћР±СЉСЏРІР»РµРЅРёРµ РєРѕРЅСЃС‚Р°РЅС‚
     const fp_t PI = static_cast<fp_t>(M_PI);
     const fp_t ONE_THIRD = static_cast<fp_t>(1.L / 3.L);
 
-    // Расчетные коэффициенты
+    // Р Р°СЃС‡РµС‚РЅС‹Рµ РєРѕСЌС„С„РёС†РёРµРЅС‚С‹
     fp_t Q = fms(static_cast<fp_t>(3), b, a, a) / static_cast<fp_t>(9);
     fp_t R = fms(fms(static_cast<fp_t>(9), b, static_cast<fp_t>(2) * a, a), a, static_cast<fp_t>(27), c) / static_cast<fp_t>(54);
     fp_t C = R * pow(abs(Q), static_cast<fp_t>(-1.5));
 
-    // Дискриминант
+    // Р”РёСЃРєСЂРёРјРёРЅР°РЅС‚
     fp_t D = fms(Q, Q * Q, -R, R);
 
-    // Количество вещественных корней
+    // РљРѕР»РёС‡РµСЃС‚РІРѕ РІРµС‰РµСЃС‚РІРµРЅРЅС‹С… РєРѕСЂРЅРµР№
     unsigned int numberOfRoots = D <= 0 ? 3 : 1;
 
-    if (D < 0) // D < 0: Все три корня вещественные и различные
+    if (D < 0) // D < 0: Р’СЃРµ С‚СЂРё РєРѕСЂРЅСЏ РІРµС‰РµСЃС‚РІРµРЅРЅС‹Рµ Рё СЂР°Р·Р»РёС‡РЅС‹Рµ
     {
         fp_t fi = acos(R / pow(-Q, static_cast<fp_t>(1.5)));
 
@@ -64,7 +64,7 @@ unsigned int solveCubic(fp_t n, fp_t a, fp_t b, fp_t c, vector<fp_t>& roots)
             fms(sqrtQ, cos(fma(static_cast<fp_t>(4), PI, fi) * ONE_THIRD), a, ONE_THIRD)
         };
     }
-    else if (D > 0) // D > 0: Только один корень вещественный, остальные комплексные
+    else if (D > 0) // D > 0: РўРѕР»СЊРєРѕ РѕРґРёРЅ РєРѕСЂРµРЅСЊ РІРµС‰РµСЃС‚РІРµРЅРЅС‹Р№, РѕСЃС‚Р°Р»СЊРЅС‹Рµ РєРѕРјРїР»РµРєСЃРЅС‹Рµ
     {
         fp_t y = Q > 0            ? static_cast<fp_t>(2) * sinh(asinh(C) * ONE_THIRD) :
                  Q < 0 && C >= 1  ? static_cast<fp_t>(2) * cosh((acosh(C) * ONE_THIRD)) :
@@ -76,11 +76,11 @@ unsigned int solveCubic(fp_t n, fp_t a, fp_t b, fp_t c, vector<fp_t>& roots)
             fms(sqrt(abs(Q)), y, a, ONE_THIRD)
         };
     }
-    else // D = 0: Все три корня вещественные, один из которых кратен двум
+    else // D = 0: Р’СЃРµ С‚СЂРё РєРѕСЂРЅСЏ РІРµС‰РµСЃС‚РІРµРЅРЅС‹Рµ, РѕРґРёРЅ РёР· РєРѕС‚РѕСЂС‹С… РєСЂР°С‚РµРЅ РґРІСѓРј
     {
         roots =
         {
-            fms(sgn(-R) * static_cast<fp_t>(-2), sqrt(abs(Q)), a, ONE_THIRD),
+            fms(sgn(R) * static_cast<fp_t>(2), sqrt(abs(Q)), a, ONE_THIRD),
             fms(-a, ONE_THIRD, static_cast<fp_t>(sgn(R)), sqrt(abs(Q))),
             fms(-a, ONE_THIRD, static_cast<fp_t>(sgn(R)), sqrt(abs(Q)))
         };
@@ -90,35 +90,35 @@ unsigned int solveCubic(fp_t n, fp_t a, fp_t b, fp_t c, vector<fp_t>& roots)
 }
 
 /*
-    Имплементация метода решения уравнения четвертой степени — A_Note_on_the_Solution_of_Quartic_Equations-Salzer-1960
-    Информация о методе — https://www.ams.org/journals/mcom/1960-14-071/S0025-5718-1960-0117882-6/S0025-5718-1960-0117882-6.pdf
-    Работу выполнил — Погосов Даниэль (https://github.com/DarklleS)
+    РРјРїР»РµРјРµРЅС‚Р°С†РёСЏ РјРµС‚РѕРґР° СЂРµС€РµРЅРёСЏ СѓСЂР°РІРЅРµРЅРёСЏ С‡РµС‚РІРµСЂС‚РѕР№ СЃС‚РµРїРµРЅРё вЂ” A_Note_on_the_Solution_of_Quartic_Equations-Salzer-1960
+    РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РјРµС‚РѕРґРµ вЂ” https://www.ams.org/journals/mcom/1960-14-071/S0025-5718-1960-0117882-6/S0025-5718-1960-0117882-6.pdf
+    Р Р°Р±РѕС‚Сѓ РІС‹РїРѕР»РЅРёР» вЂ” РџРѕРіРѕСЃРѕРІ Р”Р°РЅРёСЌР»СЊ (https://github.com/DarklleS)
 */
 template<typename fp_t>
 unsigned int solve(fp_t N, fp_t A, fp_t B, fp_t C, fp_t D, vector<fp_t>& roots)
 {
-    // Нормировка исходных коэффициентов, где n - старший коэффициент уравнения
+    // РќРѕСЂРјРёСЂРѕРІРєР° РёСЃС…РѕРґРЅС‹С… РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ, РіРґРµ n - СЃС‚Р°СЂС€РёР№ РєРѕСЌС„С„РёС†РёРµРЅС‚ СѓСЂР°РІРЅРµРЅРёСЏ
     A /= N;
     B /= N;
     C /= N;
     D /= N;
 
-    // Количество вещественных корней
+    // РљРѕР»РёС‡РµСЃС‚РІРѕ РІРµС‰РµСЃС‚РІРµРЅРЅС‹С… РєРѕСЂРЅРµР№
     unsigned int numberOfRoots = 0;
 
-    // Вычисление коэффициентов кубического уравнения
+    // Р’С‹С‡РёСЃР»РµРЅРёРµ РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ РєСѓР±РёС‡РµСЃРєРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ
     fp_t a = -B;
     fp_t b = fms(A, C, static_cast<fp_t>(4), D);
     fp_t c = fms(D, fms(static_cast<fp_t>(4), B, A, A), C, C);
     vector<fp_t> cubicRoots(3);
 
-    // Решение кубического уравнения
+    // Р РµС€РµРЅРёРµ РєСѓР±РёС‡РµСЃРєРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ
     solveCubic(static_cast<fp_t>(1), a, b, c, cubicRoots);
 
-    // Вещественный корень кубического уравнения
+    // Р’РµС‰РµСЃС‚РІРµРЅРЅС‹Р№ РєРѕСЂРµРЅСЊ РєСѓР±РёС‡РµСЃРєРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ
     fp_t x = cubicRoots[0];
 
-    // Вычисление начальных расчетных коэффициентов
+    // Р’С‹С‡РёСЃР»РµРЅРёРµ РЅР°С‡Р°Р»СЊРЅС‹С… СЂР°СЃС‡РµС‚РЅС‹С… РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ
     fp_t m;
     fp_t n;
     fp_t mm = fma(static_cast<fp_t>(0.25) * A, A, -B) + x;
@@ -133,18 +133,18 @@ unsigned int solve(fp_t N, fp_t A, fp_t B, fp_t C, fp_t D, vector<fp_t>& roots)
         m = 0;
         n = sqrt(fma(static_cast<fp_t>(0.25) * x, x, -D));
     }
-    else // m - комплексное, следовательно уравнение не будет иметь вещественных корней
+    else // m - РєРѕРјРїР»РµРєСЃРЅРѕРµ, СЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕ СѓСЂР°РІРЅРµРЅРёРµ РЅРµ Р±СѓРґРµС‚ РёРјРµС‚СЊ РІРµС‰РµСЃС‚РІРµРЅРЅС‹С… РєРѕСЂРЅРµР№
     {
         return 0;
     }
 
-    // Вычисление расчетных коэффициентов
-    fp_t alfa = fma(static_cast<fp_t>(0.5) * A, A, -x) - B;
+    // Р’С‹С‡РёСЃР»РµРЅРёРµ СЂР°СЃС‡РµС‚РЅС‹С… РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ
+    fp_t alpha = fma(static_cast<fp_t>(0.5) * A, A, -x) - B;
     fp_t beta = fms(static_cast<fp_t>(4), n, A, m);
-    fp_t gamma = alfa + beta;
-    fp_t delta = alfa - beta;
+    fp_t gamma = alpha + beta;
+    fp_t delta = alpha - beta;
 
-    if (gamma >= 0) // Если gamma >= 0, то уравнение имеет два либо больше вещественных корней
+    if (gamma >= 0) // Р•СЃР»Рё gamma >= 0, С‚Рѕ СѓСЂР°РІРЅРµРЅРёРµ РёРјРµРµС‚ РґРІР° Р»РёР±Рѕ Р±РѕР»СЊС€Рµ РІРµС‰РµСЃС‚РІРµРЅРЅС‹С… РєРѕСЂРЅРµР№
     {
         gamma = sqrt(gamma);
 
@@ -153,7 +153,8 @@ unsigned int solve(fp_t N, fp_t A, fp_t B, fp_t C, fp_t D, vector<fp_t>& roots)
 
         numberOfRoots += 2;
     }
-    if (delta >= 0) // Если delta >= 0, то уравнение имеет два либо больше вещественных корней
+    
+    if (delta >= 0) // Р•СЃР»Рё delta >= 0, С‚Рѕ СѓСЂР°РІРЅРµРЅРёРµ РёРјРµРµС‚ РґРІР° Р»РёР±Рѕ Р±РѕР»СЊС€Рµ РІРµС‰РµСЃС‚РІРµРЅРЅС‹С… РєРѕСЂРЅРµР№
     {
         delta = sqrt(delta);
 
