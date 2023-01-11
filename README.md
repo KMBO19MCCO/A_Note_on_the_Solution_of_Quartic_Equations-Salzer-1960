@@ -1,1 +1,1 @@
-# A_Note_on_the_Solution_of_Quartic_Equations-Salzer-1960
+# Wolfram_Cubic_Formula-AND-Solution_of_Quartic_Equations-Salzer-1960
